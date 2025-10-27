@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costur Confecções - Calculadora de Medidas</title>
+    <style>
+        :root {
+            --primary-color: #e6f2ff;
+            --secondary-color: #cce5ff;
+            --accent-color: #0077cc;
+            --accent-light: #4da6ff;
+            --text-color: #003366;
+            --border-color: #99ccff;
+            --shadow-color: rgba(0, 119, 204, 0.2);
+            --card-bg: #f8fbff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        .calculator-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .calculator-header {
+            background: linear-gradient(to right, var(--accent-color), var(--accent-light));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .calculator-body {
+            padding: 30px;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .menu-item {
+            background-color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-color: var(--accent-color);
+        }
+        
+        .menu-item.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
+        .calculation-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        input {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+        }
+        
+        .results-container {
+            margin-top: 20px;
+        }
+        
+        .results-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            text-align: center;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .double-results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .double-section {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px var(--shadow-color);
+        }
+        
+        .double-title {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px var(--shadow-color);
+        }
+        
+        .result-label {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .unit {
+            font-size: 1rem;
+            margin-left: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .results-grid, .double-results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Costur Confecções</div>
+            <h1>Calculadora de Medidas</h1>
+            <p class="subtitle">Calcule automaticamente as medidas para suas confecções</p>
+        </header>
+        
+        <div class="calculator-card">
+            <div class="calculator-header">
+                <h2>Selecione o tipo de cálculo</h2>
+            </div>
+            
+            <div class="calculator-body">
+                <div class="menu-section">
+                    <div class="menu-title">
+                        Tipos de Gola
+                    </div>
+                    <div class="menu-grid" id="gola-menu">
+                        <div class="menu-item active" data-type="gola-tecido">
+                            Gola Careca - Tecido
+                        </div>
+                        <div class="menu-item" data-type="gola-ribana">
+                            Gola Careca - Ribana
+                        </div>
+                        <div class="menu-item" data-type="gola-dupla-ribana">
+                            Gola Dupla Ribana
+                        </div>
+                        <div class="menu-item" data-type="gola-dupla-tecido">
+                            Gola Dupla Tecido
+                        </div>
+                        <div class="menu-item" data-type="gola-v-tecido">
+                            Gola V - Tecido
+                        </div>
+                        <div class="menu-item" data-type="gola-v-ribana">
+                            Gola V - Ribana
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">
+                        Punhos
+                    </div>
+                    <div class="menu-grid" id="punho-menu">
+                        <div class="menu-item" data-type="punho">
+                            Punho de Tecido/Ribana
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calculation-section">
+                    <h3 id="calculation-title">Gola Careca - Tecido</h3>
+                    
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="tamanho-input">Tamanho gola 1/2 (cm)</label>
+                            <input type="number" id="tamanho-input" min="0" step="0.1" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="results-container" id="normal-results">
+                        <div class="results-title">Resultados de Corte</div>
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <div class="result-label">Com Elastano</div>
+                                <div class="result-value" id="result-com-elastano">0<span class="unit">cm</span></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="result-label">Sem Elastano</div>
+                                <div class="result-value" id="result-sem-elastano">0<span class="unit">cm</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-container" id="double-results" style="display: none;">
+                        <div class="double-results-grid">
+                            <div class="double-section">
+                                <div class="double-title">Com Elastano</div>
+                                <div class="results-grid">
+                                    <div class="result-card">
+                                        <div class="result-label">Flexível</div>
+                                        <div class="result-value" id="result-dupla-flex84">0<span class="unit">cm</span></div>
+                                    </div>
+                                    <div class="result-card">
+                                        <div class="result-label">Rígida</div>
+                                        <div class="result-value" id="result-dupla-rig84">0<span class="unit">cm</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="double-section">
+                                <div class="double-title">Sem Elastano</div>
+                                <div class="results-grid">
+                                    <div class="result-card">
+                                        <div class="result-label">Flexível</div>
+                                        <div class="result-value" id="result-dupla-flex18">0<span class="unit">cm</span></div>
+                                    </div>
+                                    <div class="result-card">
+                                        <div class="result-label">Rígida</div>
+                                        <div class="result-value" id="result-dupla-rig18">0<span class="unit">cm</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Costur Confecções &copy; 2023 - Calculadora de Medidas
+        </footer>
+    </div>
+
+    <script>
+        // Dados dos cálculos
+        const calculationData = {
+            'gola-tecido': {
+                title: 'Gola Careca - Tecido',
+                type: 'normal',
+                comElastano: (tamanho) => (tamanho * 2 - 4).toFixed(1),
+                semElastano: (tamanho) => (tamanho * 2 - 3).toFixed(1)
+            },
+            'gola-ribana': {
+                title: 'Gola Careca - Ribana',
+                type: 'normal',
+                comElastano: (tamanho) => (tamanho * 2 - 6).toFixed(1),
+                semElastano: (tamanho) => (tamanho * 2 - 4).toFixed(1)
+            },
+            'gola-dupla-ribana': {
+                title: 'Gola Dupla Ribana',
+                type: 'double',
+                flex84: (tamanho) => ((tamanho * 2) * 0.84 - (6 * 0.88) + 3).toFixed(1),
+                rig84: (tamanho) => ((tamanho * 2) * 0.84 - (4 * 0.88) + 3).toFixed(1),
+                flex18: (tamanho) => ((tamanho * 2) * 0.18 - (6 * 0.12) + 3).toFixed(1),
+                rig18: (tamanho) => ((tamanho * 2) * 0.18 - (4 * 0.12) + 3).toFixed(1)
+            },
+            'gola-dupla-tecido': {
+                title: 'Gola Dupla Tecido',
+                type: 'double',
+                flex84: (tamanho) => ((tamanho * 2) * 0.84 - (2 * 0.88) + 3).toFixed(1),
+                rig84: (tamanho) => ((tamanho * 2) * 0.84 - (1 * 0.88) + 3).toFixed(1),
+                flex18: (tamanho) => ((tamanho * 2) * 0.18 - (2 * 0.12) + 3).toFixed(1),
+                rig18: (tamanho) => ((tamanho * 2) * 0.18 - (1 * 0.12) + 3).toFixed(1)
+            },
+            'gola-v-tecido': {
+                title: 'Gola V - Tecido',
+                type: 'normal',
+                comElastano: (tamanho) => (tamanho * 2 - 1).toFixed(1),
+                semElastano: (tamanho) => (tamanho * 2 - 0).toFixed(1)
+            },
+            'gola-v-ribana': {
+                title: 'Gola V - Ribana',
+                type: 'normal',
+                comElastano: (tamanho) => (tamanho * 2 - 0).toFixed(1),
+                semElastano: (tamanho) => (tamanho * 2 - 0).toFixed(1)
+            },
+            'punho': {
+                title: 'Punho de Tecido ou Ribana',
+                type: 'normal',
+                comElastano: (tamanho) => (tamanho * 2 - 2).toFixed(1),
+                semElastano: (tamanho) => (tamanho * 2 - 3).toFixed(1)
+            }
+        };
+
+        // Elementos da interface
+        const menuItems = document.querySelectorAll('.menu-item');
+        const calculationTitle = document.getElementById('calculation-title');
+        const tamanhoInput = document.getElementById('tamanho-input');
+        const resultComElastano = document.getElementById('result-com-elastano');
+        const resultSemElastano = document.getElementById('result-sem-elastano');
+        const normalResults = document.getElementById('normal-results');
+        const doubleResults = document.getElementById('double-results');
+        
+        // Elementos para resultados duplos
+        const resultDuplaFlex84 = document.getElementById('result-dupla-flex84');
+        const resultDuplaRig84 = document.getElementById('result-dupla-rig84');
+        const resultDuplaFlex18 = document.getElementById('result-dupla-flex18');
+        const resultDuplaRig18 = document.getElementById('result-dupla-rig18');
+
+        // Tipo de cálculo atual
+        let currentCalculation = 'gola-tecido';
+
+        // Atualizar cálculos
+        function updateCalculations() {
+            const tamanho = parseFloat(tamanhoInput.value) || 0;
+            const data = calculationData[currentCalculation];
+            
+            calculationTitle.textContent = data.title;
+            
+            if (data.type === 'normal') {
+                normalResults.style.display = 'block';
+                doubleResults.style.display = 'none';
+                
+                resultComElastano.innerHTML = `${data.comElastano(tamanho)}<span class="unit">cm</span>`;
+                resultSemElastano.innerHTML = `${data.semElastano(tamanho)}<span class="unit">cm</span>`;
+            } else if (data.type === 'double') {
+                normalResults.style.display = 'none';
+                doubleResults.style.display = 'block';
+                
+                resultDuplaFlex84.innerHTML = `${data.flex84(tamanho)}<span class="unit">cm</span>`;
+                resultDuplaRig84.innerHTML = `${data.rig84(tamanho)}<span class="unit">cm</span>`;
+                resultDuplaFlex18.innerHTML = `${data.flex18(tamanho)}<span class="unit">cm</span>`;
+                resultDuplaRig18.innerHTML = `${data.rig18(tamanho)}<span class="unit">cm</span>`;
+            }
+        }
+
+        // Event listeners para os itens do menu
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remover classe active de todos os itens
+                menuItems.forEach(i => i.classList.remove('active'));
+                
+                // Adicionar classe active ao item clicado
+                this.classList.add('active');
+                
+                // Atualizar cálculo atual
+                currentCalculation = this.getAttribute('data-type');
+                
+                // Atualizar cálculos
+                updateCalculations();
+            });
+        });
+
+        // Event listener para o input
+        tamanhoInput.addEventListener('input', updateCalculations);
+
+        // Inicializar cálculos
+        updateCalculations();
+    </script>
+</body>
+</html>
